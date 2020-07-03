@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:money_manager/user_data.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,8 +12,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _moneyController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  List<int> money = [];
-  List<String> description = [];
+  UserData data = UserData();
   String date = '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
   @override
@@ -57,15 +57,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () {
                             if(_formKey.currentState.validate()) {
                               setState(() {
-                                money.add(int.parse(_moneyController.text));
-                                _descriptionController.text == '' ? description.add('no description') : description.add(_descriptionController.text);
+                                data.money.add(_moneyController.text);
+                                _descriptionController.text == '' ? data.description.add('no description') : data.description.add(_descriptionController.text);
                                 _moneyController.text = '';
                                 _descriptionController.text = '';
                                 Navigator.pop(context);
                               });
                             }
-                            print(money);
-                            print(description);
+                            print(data.money);
+                            print(data.description);
                           },
                           color: Colors.blue,
                         )
@@ -73,14 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ));
             }));
-            print(description);
+            print(data.description);
           },
         ),
         appBar: AppBar(
           title: Text('Money Manager'),
         ),
         body: ListView.builder(
-          itemCount: money.length,
+          itemCount: data.money.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -91,8 +91,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Rp. ${money[index].toString()}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(description[index])
+                      Text('Rp. ${data.money[index].toString()}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      Text(data.description[index])
                     ],
                   )
                 ],
